@@ -8,21 +8,28 @@ import { StockList } from "./controller/StockList";
 import { NotificationRepositoryDatabase } from "./infra/repository/database/NotifcationRepositoryDatabase";
 import { NotificationCreate } from "./controller/NotificationCreate";
 import { NotificationList } from "./controller/NotificationList";
+import { CategoryRepositoryDatabase } from "./infra/repository/database/CategoryRepositoryDatabase";
+import { CategoryCreate } from "./controller/CategoryCreate";
+import { CategoryList } from "./controller/CategoryList";
 
-const router = Router()
+const router = Router();
+// DATABASE
+const repository = new UserRepositoryDatabase();
+const stockRepository = new StockRepositoryDatabase();
+const notificationRepository = new NotificationRepositoryDatabase();
+const categoryRepository = new CategoryRepositoryDatabase();
 
-const repository = new UserRepositoryDatabase()
-const stockRepository = new StockRepositoryDatabase()
-const notificationRepository = new NotificationRepositoryDatabase()
+const userCreate = new UserCreate(repository);
+const userList = new UserList(repository);
 
-const userCreate = new UserCreate(repository)
-const userList = new UserList(repository)
-
-const stockCreate = new StockCreate(stockRepository)
-const stockList = new StockList(stockRepository)
+const stockCreate = new StockCreate(stockRepository);
+const stockList = new StockList(stockRepository);
 
 const notificationCreate = new NotificationCreate(notificationRepository);
 const notificationList = new NotificationList(notificationRepository);
+
+const categoryCreate = new CategoryCreate(categoryRepository);
+const categoryList = new CategoryList(categoryRepository);
 
 router.post('/user', (req: Request, res: Response) => {
     userCreate.execute(req, res)
@@ -49,6 +56,15 @@ router.post('/notification', (req: Request, res: Response) => {
 
 router.get('/notification', (req: Request, res: Response) => {
     notificationList.execute(req, res);
+})
+
+// CATEGORY 
+router.post('/category', (req: Request, res: Response) => {
+    categoryCreate.execute(req, res)
+})
+
+router.get('/category', (req: Request, res: Response) => {
+    categoryList.execute(req, res)
 })
 
 export { router }
