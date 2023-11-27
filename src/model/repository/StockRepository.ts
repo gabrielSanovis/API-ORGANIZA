@@ -5,4 +5,5 @@ export interface StockRepository {
     save(stock: Stock): Promise<void>
     getAll(): Promise<Array<Stock>>
     getById(id: Uuid): Promise<Stock>
+    remove(id: Uuid): Promise<void>
 }

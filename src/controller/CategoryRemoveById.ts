@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
-import { StockRepository } from "../model/repository/StockRepository";
+import { CategoryRepository } from "../model/repository/CategoryRepository";
 import { Uuid } from "../model/Uuid";
 
-export class StockRemoveById {
+export class CategoryRemoveById {
 
-    constructor(readonly repository: StockRepository) {
+    constructor(readonly repository: CategoryRepository) {
 
     }
 
@@ -17,6 +17,6 @@ export class StockRemoveById {
         id = new Uuid(id);
 
         await this.repository.remove(id)
-        response.status(201).json({menssage: "Ação deletada com sucesso."})
+        response.status(201).json({menssage: "Categoria deletada com sucesso."})
     }
 }

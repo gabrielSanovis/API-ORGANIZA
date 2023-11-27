@@ -44,4 +44,8 @@ export class NotificationRepositoryDatabase implements NotificationRepository {
         return Notification.create(notification['descricao'], notification['data'], notification['usuario_id'], notification['notificacao_id']);
     }
 
+    async remove(id: Uuid): Promise<void> {
+        await this.connection('notification').where({ "notificacao_id": id.getValue()}).delete();
+    }
+
 }

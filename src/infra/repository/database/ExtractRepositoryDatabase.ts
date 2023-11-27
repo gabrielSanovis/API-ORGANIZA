@@ -70,4 +70,8 @@ export class ExtractRepositoryDatabase implements ExtractRepository {
         return extract;
     }
 
+    async remove(id: Uuid): Promise<void> {
+        await this.connection('extract_category').where({ 'extrato_id': id.getValue() }).delete();
+        await this.connection('extract').where({ "extrato_id": id.getValue()}).delete();
+    }
 }

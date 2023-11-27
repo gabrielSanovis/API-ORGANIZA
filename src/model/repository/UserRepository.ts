@@ -6,4 +6,5 @@ export interface UserRepository {
     getAll(): Promise<Array<User>>
     getById(email: string): Promise<User>
     remove(id: Uuid): Promise<void>
+    remove(id: Uuid): Promise<void>
 }

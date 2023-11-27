@@ -39,4 +39,8 @@ export class CategoryRepositoryDatabase implements CategoryRepository {
         }
         return Category.create(category['nome'], category['categoria_id']);
     }
+
+    async remove(id: Uuid): Promise<void> {
+        await this.connection('category').where({ "categoria_id": id.getValue()}).delete();
+    }
 }
