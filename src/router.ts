@@ -24,6 +24,7 @@ import { CategoryRemoveById } from "./controller/CategoryRemoveById";
 import { ExtractRemoveById } from "./controller/ExtractRemoveById";
 import { NotificationRemoveById } from "./controller/NotificationRemoveById";
 import { StockRemoveById } from "./controller/StockRemoveById";
+import { UserUpdateById } from "./controller/UserUpdateById";
 
 const router = Router();
 // DATABASE
@@ -36,7 +37,8 @@ const extractRepository = new ExtractRepositoryDatabase();
 const userCreate = new UserCreate(repository);
 const userList = new UserList(repository);
 const userGetById = new UserGetById(repository);
-const useRemoveById = new UserRemoveById(repository);
+const userRemoveById = new UserRemoveById(repository);
+const userUpdateById = new UserUpdateById(repository);
 
 const stockCreate = new StockCreate(stockRepository);
 const stockList = new StockList(stockRepository);
@@ -71,7 +73,11 @@ router.get('/user/:email', (req: Request, res: Response) => {
 })
 
 router.delete('/user/:id', (req: Request, res: Response) => {
-    useRemoveById.execute(req, res)
+    userRemoveById.execute(req, res)
+})
+
+router.put('/user/:email', (req: Request, res: Response) => {
+    userUpdateById.execute(req, res)
 })
 
 

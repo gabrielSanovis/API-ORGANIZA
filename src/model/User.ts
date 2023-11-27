@@ -14,7 +14,16 @@ export class User {
     }
     
     static create( nome: string, senha: string, email: string, usuario_id?: string): User {
-        return new User( nome, senha, email, usuario_id)
+        return new User(nome, senha, email, usuario_id)
+    }
+
+    public update(nome: string, senha: string) {
+        if(nome !=  this.nome) {
+            this.nome = nome;
+        }
+        if(senha != this.senha) {
+            this.senha = senha
+        }
     }
 
     public getId(): Uuid {

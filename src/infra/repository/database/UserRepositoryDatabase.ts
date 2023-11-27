@@ -3,6 +3,7 @@ import { User } from "../../../model/User";
 import { UserRepository } from "../../../model/repository/UserRepository";
 import { development } from "./KnexConfig";
 import { Uuid } from "../../../model/Uuid";
+import { UserUpdateDTO } from "../../../controller/dtos/UserUpdateDTO";
 
 
 export class UserRepositoryDatabase implements UserRepository {
@@ -51,6 +52,14 @@ export class UserRepositoryDatabase implements UserRepository {
         }
         await this.connection('extract').where({ "usuario_id": id.getValue()}).delete()
         await this.connection('user').where({ "usuario_id": id.getValue()}).delete();
+    }
+
+    async update(email: string, userDTO: UserUpdateDTO): Promise<User> {
+        await this.connection('user').where({"email": email}).update({
+            "nome": userDTO.nome,
+            "senha": userDTO.senha
+        })
+        return await this.getById(email)
     }
 
 }
