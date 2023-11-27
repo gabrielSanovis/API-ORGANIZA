@@ -8,16 +8,16 @@ export class Extract {
     private usuario_id: string
     private acao_id: string | null
 
-    constructor(valor: number, data: string, tipo: string, usuario_id: string, acao_id: string | null = null, extrato_id?: string) {
+    constructor(valor: number, data: string, tipo: string, usuario_id: string, acao_id?: string | null, extrato_id?: string) {
         this.valor = valor
         this.data = data
         this.tipo = tipo
         this.usuario_id = usuario_id
-        this.acao_id = acao_id
+        this.acao_id = acao_id ? acao_id : null
         this.extrato_id = extrato_id ? new Uuid(extrato_id) : Uuid.randomGenerator()
     }
     
-    static create(valor: number, data: string, tipo: string, usuario_id: string, acao_id: string | null = null, extrato_id?: string): Extract {
+    static create(valor: number, data: string, tipo: string, usuario_id: string, acao_id?: string | null, extrato_id?: string): Extract {
         return new Extract(valor, data, tipo, usuario_id, acao_id, extrato_id)
     }
 
