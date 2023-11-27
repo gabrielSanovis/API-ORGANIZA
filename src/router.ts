@@ -1,21 +1,25 @@
 import { Request, Response, Router } from "express";
 import { UserCreate } from "./controller/UserCreate";
 import { UserList } from "./controller/UserList";
+import { UserGetById } from "./controller/UserGetById";
+import { UserRemoveById } from "./controller/UserRemoveById";
 import { UserRepositoryDatabase } from "./infra/repository/database/UserRepositoryDatabase";
-import { StockCreate } from "./controller/StockCreate";
 import { StockRepositoryDatabase } from "./infra/repository/database/StockRepositoryDatabase";
+import { StockCreate } from "./controller/StockCreate";
 import { StockList } from "./controller/StockList";
+import { StockGetById } from "./controller/StockGetById";
 import { NotificationRepositoryDatabase } from "./infra/repository/database/NotifcationRepositoryDatabase";
 import { NotificationCreate } from "./controller/NotificationCreate";
 import { NotificationList } from "./controller/NotificationList";
+import { NotificationGetById } from "./controller/NotificationGetById";
 import { CategoryRepositoryDatabase } from "./infra/repository/database/CategoryRepositoryDatabase";
 import { CategoryCreate } from "./controller/CategoryCreate";
 import { CategoryList } from "./controller/CategoryList";
 import { ExtractRepositoryDatabase } from "./infra/repository/database/ExtractRepositoryDatabase";
 import { ExtractCreate } from "./controller/ExtractCreate";
 import { ExtractList } from "./controller/ExtractList";
-import { UserGetById } from "./controller/UserGetById";
-import { UserRemoveById } from "./controller/UserRemoveById";
+import { ExtractGetById } from "./controller/ExtractGetById";
+import { CategoryGetById } from "./controller/CategoryGetById";
 
 const router = Router();
 // DATABASE
@@ -32,15 +36,21 @@ const useRemoveById = new UserRemoveById(repository);
 
 const stockCreate = new StockCreate(stockRepository);
 const stockList = new StockList(stockRepository);
+const stockGetById = new StockGetById(stockRepository);
+const stock = new StockList(stockRepository);
 
 const notificationCreate = new NotificationCreate(notificationRepository);
 const notificationList = new NotificationList(notificationRepository);
+const notificationGetById = new NotificationGetById(notificationRepository);
+const notification = new NotificationList(notificationRepository);
 
 const categoryCreate = new CategoryCreate(categoryRepository);
 const categoryList = new CategoryList(categoryRepository);
+const categoryGetById = new CategoryGetById(categoryRepository);
 
 const extractCreate = new ExtractCreate(extractRepository);
 const extractList = new ExtractList(extractRepository);
+const extractGetById = new ExtractGetById(extractRepository);
 
 router.post('/user', (req: Request, res: Response) => {
     userCreate.execute(req, res)
@@ -68,6 +78,10 @@ router.get('/stock', (req: Request, res: Response) => {
     stockList.execute(req, res);
 })
 
+router.get('/stock/:id', (req: Request, res: Response) => {
+    stockGetById.execute(req, res);
+})
+
 // NOTIFICATION
 
 router.post('/notification', (req: Request, res: Response) => {
@@ -76,6 +90,10 @@ router.post('/notification', (req: Request, res: Response) => {
 
 router.get('/notification', (req: Request, res: Response) => {
     notificationList.execute(req, res);
+})
+
+router.get('/notification/:id', (req: Request, res: Response) => {
+    notificationGetById.execute(req, res);
 })
 
 // CATEGORY 
@@ -87,6 +105,10 @@ router.get('/category', (req: Request, res: Response) => {
     categoryList.execute(req, res)
 })
 
+router.get('/category/:id', (req: Request, res: Response) => {
+    categoryGetById.execute(req, res)
+})
+
 // EXTRACT
 router.post('/extract', (req: Request, res: Response) => {
     extractCreate.execute(req, res)
@@ -94,6 +116,10 @@ router.post('/extract', (req: Request, res: Response) => {
 
 router.get('/extract', (req: Request, res: Response) => {
     extractList.execute(req, res)
+})
+
+router.get('/extract/:id', (req: Request, res: Response) => {
+    extractGetById.execute(req, res)
 })
 
 export { router }

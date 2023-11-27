@@ -2,13 +2,14 @@ import knex, { Knex } from "knex";
 import { Stock } from "../../../model/Stock";
 import { development } from "./KnexConfig";
 import { StockRepository } from "../../../model/repository/StockRepository";
+import { Uuid } from "../../../model/Uuid";
 
 export class StockRepositoryDatabase implements StockRepository {
     private connection: Knex
     constructor() {
         this.connection = knex(development)
     }
-    
+   
     async save(stock: Stock): Promise<void> {
         this.connection('stock').insert({
             'acao_id': stock.getId().getValue(),
@@ -35,6 +36,14 @@ export class StockRepositoryDatabase implements StockRepository {
 
         }
         return stockCollection;
+    }
+
+    async getById(id: Uuid): Promise<Stock> {
+        const [stock] = await this.connection('stock').select('*').where({ "acao_id": id.getValue()}).limit(1);
+        if(!stock) {
+            throw new Error(`Stock not found: ${id}`)
+        }
+        return Stock.create(stock['cotacao'], stock['papeis_disponiveis'], stock['lucro_liquido_anual'], stock['nome'], stock['acao_id']);
     }
     
 }

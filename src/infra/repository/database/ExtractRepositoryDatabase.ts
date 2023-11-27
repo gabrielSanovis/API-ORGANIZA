@@ -43,7 +43,6 @@ export class ExtractRepositoryDatabase implements ExtractRepository {
 
         const extracts = await this.connection('extract')
         .select("extract.extrato_id", "valor", "data", "tipo", "category.nome AS categoria", "stock.nome AS acao")
-        .from("extract")
         .join("extract_category", "extract.extrato_id", "=", "extract_category.extrato_id")
         .join("category", "extract_category.categoria_id", "=", "category.categoria_id")
         .modify((queryBuilder) => {
@@ -54,6 +53,21 @@ export class ExtractRepositoryDatabase implements ExtractRepository {
             extractCollection.push(extract)
         }
         return extractCollection;
+    }
+
+    async getById(id: Uuid): Promise<Extract> {
+        const [extract] = await this.connection('extract')
+        .select("extract.extrato_id", "valor", "data", "tipo", "category.nome AS categoria", "stock.nome AS acao")
+        .where({ "extract.extrato_id": id.getValue()})
+        .join("extract_category", "extract.extrato_id", "=", "extract_category.extrato_id")
+        .join("category", "extract_category.categoria_id", "=", "category.categoria_id")
+        .modify((queryBuilder) => {
+            queryBuilder.leftJoin("stock", "stock.acao_id", "=", "extract.acao_id")
+        });
+        if(!extract) {
+            throw new Error(`Extract not found: ${id}`)
+        }
+        return extract;
     }
 
 }

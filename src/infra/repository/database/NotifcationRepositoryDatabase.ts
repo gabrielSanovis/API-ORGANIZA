@@ -2,6 +2,7 @@ import knex, { Knex } from "knex";
 import { development } from "./KnexConfig";
 import { NotificationRepository } from "../../../model/repository/NotificationRepository";
 import { Notification } from "../../../model/Notification";
+import { Uuid } from "../../../model/Uuid";
 
 export class NotificationRepositoryDatabase implements NotificationRepository {
     private connection: Knex
@@ -33,6 +34,14 @@ export class NotificationRepositoryDatabase implements NotificationRepository {
             notificationCollection.push(Notification.create(descricao, data, usuarioId, notificationId));
         }
         return notificationCollection;
+    }
+
+    async getById(id: Uuid): Promise<Notification> {
+        const [notification] = await this.connection('notification').select('*').where({ "notificacao_id": id.getValue()}).limit(1);
+        if(!notification) {
+            throw new Error(`Notification not found: ${id}`)
+        }
+        return Notification.create(notification['descricao'], notification['data'], notification['usuario_id'], notification['notificacao_id']);
     }
 
 }

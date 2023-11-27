@@ -2,6 +2,7 @@ import knex, { Knex } from "knex";
 import { development } from "./KnexConfig";
 import { CategoryRepository } from "../../../model/repository/CategoryRepository";
 import { Category } from "../../../model/Category";
+import { Uuid } from "../../../model/Uuid";
 
 export class CategoryRepositoryDatabase implements CategoryRepository {
     private connection: Knex
@@ -29,5 +30,13 @@ export class CategoryRepositoryDatabase implements CategoryRepository {
             categoryCollection.push(Category.create(nome, categoryId));
         }
         return categoryCollection;
+    }
+
+    async getById(id: Uuid): Promise<Category> {
+        const [category] = await this.connection('category').select('*').where({ "categoria_id": id.getValue()}).limit(1);
+        if(!category) {
+            throw new Error(`Category not found: ${id}`)
+        }
+        return Category.create(category['nome'], category['categoria_id']);
     }
 }
